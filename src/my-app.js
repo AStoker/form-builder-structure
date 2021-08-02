@@ -2,6 +2,8 @@ import BasicElement from "./parts/element.js";
 import Component from "./parts/component.js";
 import Block from "./parts/block.js";
 
+import FormBuilderParser from "./FormBuilderParser.js";
+
 
 export class MyApp {
     message = 'Hello World!';
@@ -12,10 +14,10 @@ export class MyApp {
 
     bound() {
         console.log('MyApp created');
-        this.container.appendChild(this.firstNameElement.toView());
-        this.container.appendChild(this.lastNameElement.toView());
-
         this.container.appendChild(this.block.toView());
+
+        let parser = new FormBuilderParser(this.formJSON);
+        this.created.appendChild(parser.parseDOM());
     }
 
     createStuff() {
@@ -69,6 +71,27 @@ export class MyApp {
             }},
             [this.firstNameElement, this.lastNameElement]
         );
+        this.block2 = new Block('names2', {
+            type: 'div',
+            attributes: {
+            }},
+            [this.firstNameElement, this.lastNameElement]
+        );
+    }
+
+    get formJSON() {
+        /*
+            The structure of the JSON is as follows:
+            {
+                version: '1.0',
+                parts: []
+            }
+
+        */
+        return JSON.stringify({
+            version: '1.0',
+            parts: [this.block.toJSON(), this.block2.toJSON()]
+        }, null, 4);
     }
 
 }

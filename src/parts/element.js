@@ -24,4 +24,14 @@ export default class BasicElement extends Part {
         return element;
     }
 
+    toJSON() {
+        let json = {
+            name: this.name,
+            type: this.type,
+            attributes: this.attributes
+        };
+
+        return json;
+    }
+
 }

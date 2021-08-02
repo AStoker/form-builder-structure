@@ -1,10 +1,11 @@
+import BasicElement from './element.js';
 import Part from './Part.js';
 
 export default class Component extends Part {
 
     constructor(name = 'component', {type, attributes}, children = []) {
         super(name, {type, attributes});
-        this.children = children;
+        this.children = parseJSONChildren(children);
     }
 
     toView() {
@@ -23,4 +24,25 @@ export default class Component extends Part {
         return element;
     }
 
+    toJSON() {
+        let json = {
+            name: this.name,
+            type: this.type,
+            attributes: this.attributes,
+            children: this.children.map(child => child.toJSON())
+        };
+
+        return json;
+    }
+
+}
+
+function parseJSONChildren(children) {
+    return children.map(({name, type, attributes, children}) => {
+        if (children) {
+            return new Component(name, {type, attributes}, children);
+        } else {
+            return new BasicElement(name, {type, attributes});
+        }
+    });
 }
