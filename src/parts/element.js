@@ -2,21 +2,11 @@ import Part from './Part.js';
 
 export default class BasicElement extends Part {
 
-    constructor(name, {type, attributes}) {
-        super(name, {type, attributes});
+    constructor(name, {type, attributes, events}) {
+        super(name, {type, attributes, events});
     }
-
     
-    toView() {
-        let element = document.createElement(this.type);
-
-        //Set attributes
-        for (let attribute in this.attributes) {
-            element[attribute] = this.attributes[attribute];
-        }
-
-        return element;
-    }
+    //toView inherited from Part
 
     toFormBuilderView() {
         let element = this.toView();

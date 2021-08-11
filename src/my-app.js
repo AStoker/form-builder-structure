@@ -2,7 +2,9 @@ import BasicElement from "./parts/element.js";
 import Component from "./parts/component.js";
 import Block from "./parts/block.js";
 
-import FormBuilderParser from "./FormBuilderParser.js";
+import FormVersion from "./FormVersion.js";
+
+import { createElement } from './custom-elements/custom-element-factory.js';
 
 
 export class MyApp {
@@ -10,14 +12,20 @@ export class MyApp {
 
     constructor() {
         this.createStuff();
+
+        this.testElement = createElement('input');
+        console.log(this.testElement);
     }
 
     bound() {
         console.log('MyApp created');
         this.container.appendChild(this.block.toView());
 
-        let parser = new FormBuilderParser(this.formJSON);
-        this.created.appendChild(parser.parseDOM());
+        let formVersion = new FormVersion(this.formJSON);
+        formVersion.parts.forEach(part => {
+            this.created.appendChild(part.toView());
+        });
+
     }
 
     createStuff() {
@@ -25,7 +33,13 @@ export class MyApp {
             type: 'input', 
             attributes: { 
                 placeholder: 'First Name',
-                id: 'firstName'
+                id: 'firstName',
+                value: 'John'
+            },
+            events: {
+                'change': (e) => {
+                    console.log(e);
+                }
             }
         });
         let labelFirstNameElement = new BasicElement('firstNameLabel', {
@@ -64,19 +78,28 @@ export class MyApp {
             }},
             [labelLastNameElement, inputLastNameElement]
         );
+
+        let fullNameLabelElement = new BasicElement('fullNameLabel', {
+            type: 'label',
+            attributes: {
+                innerText: 'Full Name: ' + inputFirstNameElement.value,
+            }
+        });
+        this.fullNameElement = new Component('fullName', {
+            type: 'div',
+            attributes: {
+
+            }},
+            [fullNameLabelElement]
+        );
         
         this.block = new Block('names', {
             type: 'div',
             attributes: {
             }},
-            [this.firstNameElement, this.lastNameElement]
+            [this.firstNameElement, this.lastNameElement, this.fullNameElement]
         );
-        this.block2 = new Block('names2', {
-            type: 'div',
-            attributes: {
-            }},
-            [this.firstNameElement, this.lastNameElement]
-        );
+        
     }
 
     get formJSON() {
@@ -90,7 +113,7 @@ export class MyApp {
         */
         return JSON.stringify({
             version: '1.0',
-            parts: [this.block.toJSON(), this.block2.toJSON()]
+            parts: [this.block.toJSON()]
         }, null, 4);
     }
 

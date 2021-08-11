@@ -1,19 +1,21 @@
-import BasicElement from './element.js';
 import Part from './Part.js';
 
 export default class Component extends Part {
 
-    constructor(name = 'component', {type, attributes}, children = []) {
-        super(name, {type, attributes});
-        this.children = parseJSONChildren(children);
+    constructor(name = 'component', {type, attributes, events}, children = []) {
+        super(name, {type, attributes, events});
+        this.children = children;
     }
 
     toView() {
+
         let element = document.createElement(this.type); //We should create the element based off name
         
         this.children.forEach(child => {
             element.appendChild(child.toView());
         });
+
+        this.attachEventsToElement(element)
         
         return element;
     }
@@ -35,14 +37,4 @@ export default class Component extends Part {
         return json;
     }
 
-}
-
-function parseJSONChildren(children) {
-    return children.map(({name, type, attributes, children}) => {
-        if (children) {
-            return new Component(name, {type, attributes}, children);
-        } else {
-            return new BasicElement(name, {type, attributes});
-        }
-    });
 }
