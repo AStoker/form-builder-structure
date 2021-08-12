@@ -1,6 +1,5 @@
 import BasicElement from "./parts/element.js";
 import Component from "./parts/component.js";
-import Block from "./parts/block.js";
 
 import FormVersion from "./FormVersion.js";
 
@@ -13,7 +12,7 @@ export class MyApp {
     constructor() {
         this.createStuff();
 
-        this.testElement = createElement('input');
+        this.testElement = createElement('test-me');
         console.log(this.testElement);
     }
 
