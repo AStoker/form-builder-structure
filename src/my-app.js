@@ -92,7 +92,7 @@ export class MyApp {
             [fullNameLabelElement]
         );
         
-        this.block = new Block('names', {
+        this.block = new Component('names', {
             type: 'div',
             attributes: {
             }},
