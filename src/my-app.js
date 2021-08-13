@@ -3,34 +3,24 @@ import Component from "./parts/component.js";
 
 import FormVersion from "./FormVersion.js";
 
-import { enhanceElement, createElement } from './custom-elements/custom-element-factory.js';
+import { createElement } from './custom-elements/custom-element-factory.js';
 
-import Aurelia, { IPlatform, inject, IContainer } from 'aurelia';
+import { inject, IContainer } from 'aurelia';
 
-@inject(IPlatform, IContainer)
+@inject(IContainer)
 export class MyApp {
     message = 'Hello World!';
 
-    constructor(platform, auContainer) {
-        this.platform = platform;
+    constructor(auContainer) {
         this.auContainer = auContainer;
 
         console.log(auContainer);
 
         this.createStuff();
 
-        // this.testElement = enhanceElement('test-me');
-        this.otherTestElement = createElement('test-me-again', this.auContainer);
-        console.log(this.otherTestElement);
-
     }
 
     bound() {
-        console.log('MyApp created');
-
-        // let elem = createElement(this.platform, 'test-me');
-        // console.log(elem);
-        this.container.appendChild(this.otherTestElement.host);
 
         this.container.appendChild(this.block.toView());
 

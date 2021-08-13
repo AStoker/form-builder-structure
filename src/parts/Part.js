@@ -1,4 +1,5 @@
 
+import { createElement } from '../custom-elements/custom-element-factory.js';
 
 export default class Part {
     name = 'Part';
@@ -13,10 +14,12 @@ export default class Part {
         this.type = type;
         this.attributes = attributes;
         this.events = Object.assign(this.events, events);
+
     }
 
     toView() {
-        this.element = document.createElement(this.type);
+        //TODO: have some kind of lookup to determine inputs or text
+        this.element = createElement(this.name, this.type);
 
         //Set attributes
         for (let attribute in this.attributes) {
@@ -25,16 +28,16 @@ export default class Part {
 
         this.attachEventsToElement(this.element)
 
-        return this.element;
+        return this.element.host;
     }
 
     attachEventsToElement(element) {
         //Add events
-        for (let event in this.events) {
-            console.log('Adding event: ' + event);
-            element.addEventListener(event, this.events[event]);
-        }
-        return element;
+        // for (let event in this.events) {
+        //     console.log('Adding event: ' + event);
+        //     element.addEventListener(event, this.events[event]);
+        // }
+        // return element;
         
     }
 

@@ -1,4 +1,4 @@
-import Aurelia, { CustomElement } from 'aurelia';
+import Aurelia, { CustomElement, kebabCase } from 'aurelia';
 import { Controller } from '@aurelia/runtime-html';
 
 import { Input } from './types/Input.js';
@@ -24,12 +24,33 @@ export function enhanceElement(name) {
     return host;
 }
 
-export const createElement = (name, container) => {
+// import { DI, ILogger, ConsoleSink, IPlatform, LogLevel, LoggerConfiguration, Registration } from '@aurelia/kernel';
+// import { BrowserPlatform } from '@aurelia/platform-browser';
+
+// const PLATFORM = BrowserPlatform.getOrCreate(globalThis);
+
+// const staticContainer = DI.createContainer();
+// staticContainer.register(Registration.instance(IPlatform, Registration));
+// staticContainer.register(LoggerConfiguration.create({ sinks: [ConsoleSink], level: LogLevel.fatal }));
+
+// export const log = staticContainer.get(ILogger).scopeTo('iaAnyware');
+
+export const createElement = (name, elemType, cnt) => {
+    let container = cnt;
+    if (!container) {
+        let au = new Aurelia();
+        container = au.container;
+    }
+
+    name = kebabCase(name);
+
+    let vm = elemType === 'input' ? Input : Text
+
     const Elem = CustomElement.define({
         name,
         shadowOptions: { mode: 'open' },
-        template: Input.template
-    }, Input);
+        template: vm.template
+    }, vm);
 
     const component = new Elem();
 

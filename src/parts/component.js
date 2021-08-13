@@ -12,7 +12,8 @@ export default class Component extends Part {
         let element = document.createElement(this.type); //We should create the element based off name
         
         this.children.forEach(child => {
-            element.appendChild(child.toView());
+            let view = child.toView();
+            element.appendChild(view);
         });
 
         this.attachEventsToElement(element)
