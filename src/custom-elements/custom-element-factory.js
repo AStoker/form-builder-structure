@@ -24,18 +24,27 @@ export function enhanceElement(name) {
     return host;
 }
 
-// import { DI, ILogger, ConsoleSink, IPlatform, LogLevel, LoggerConfiguration, Registration } from '@aurelia/kernel';
-// import { BrowserPlatform } from '@aurelia/platform-browser';
+export const createElementDefinition = (name, elemType, cnt) => {
+    let container = cnt;
+    if (!container) {
+        let au = new Aurelia();
+        container = au.container;
+    }
 
-// const PLATFORM = BrowserPlatform.getOrCreate(globalThis);
+    name = kebabCase(name);
 
-// const staticContainer = DI.createContainer();
-// staticContainer.register(Registration.instance(IPlatform, Registration));
-// staticContainer.register(LoggerConfiguration.create({ sinks: [ConsoleSink], level: LogLevel.fatal }));
+    let vm = elemType;
 
-// export const log = staticContainer.get(ILogger).scopeTo('iaAnyware');
+    const Elem = CustomElement.define({
+        name,
+        shadowOptions: { mode: 'open' },
+        template: vm.template
+    }, vm);
 
-export const createElement = (name, elemType, cnt) => {
+    return Elem;
+}
+
+export const createElement = (name, elemType, attributes = {}, events, cnt) => {
     let container = cnt;
     if (!container) {
         let au = new Aurelia();
@@ -52,13 +61,22 @@ export const createElement = (name, elemType, cnt) => {
         template: vm.template
     }, vm);
 
-    const component = new Elem();
+    const component = container.get(Elem);
+
+    // Add attributes to component if they don't already exist
+    if (!component.attributes) {
+        component.attributes = {};
+    }
+    for (let attr in attributes) {
+        let attrDesc = Object.getOwnPropertyDescriptor(attributes, attr)
+        Object.defineProperty(component.attributes, attr, attrDesc)
+    }
 
     console.log(CustomElement);
     const host = document.createElement(name)
     const controller = Controller.$el(container, component, host, null, null);
 
-    controller.activate(controller, null, null);
+    //controller.activate(controller, null, null);
 
     return controller; // access the host on controller.host
 

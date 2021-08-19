@@ -166,7 +166,7 @@ const serve = gulp.series(
   build,
   function startServer(done) {
     devServer.run({
-      open: !process.env.CI,
+      open: false,//!process.env.CI,
       port: 9000
     });
     done();

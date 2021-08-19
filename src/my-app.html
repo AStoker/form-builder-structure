@@ -1,7 +1,23 @@
 <div class="message">${message}</div>
 
-<div ref="container"></div>
+<hr>
 
+<div ref="container">
+    <!-- <au-render repeat.for="part of formVersion.parts" component.bind="part"></au-render> -->
+    <div repeat.for="part of formVersion.parts">
+        <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
+    </div>
+</div>
+
+<hr >
+
+<label>Form Version JSON to save</label>
 <pre ref="json">${formJSON}</pre>
 
-<div ref="created"></div>
+<hr>
+
+<div ref="created">
+    <div repeat.for="part of cloneFormVersion.parts">
+        <au-compose view-model.bind="part.vm" model.bind="part.attributes"></au-compose>
+    </div>
+</div>

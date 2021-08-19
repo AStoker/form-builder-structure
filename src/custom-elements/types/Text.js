@@ -1,19 +1,30 @@
 import { IContainer } from 'aurelia';
 
 export class Text {
-    message = 'Let me text';
-
-    static template = '<label>${message}</label>';
+    //Something nice about shadow dom is that we can use id's and not care if they're used elsewhere
+    static template = '<label>${text}</label>';
     
     static inject = [IContainer];
 
     constructor(container) {
         this.container = container;
+        this.attributes = {
+            text: 'Hello world'
+        };
+    }
+
+    activate(attributes) {
+        this.attributes = attributes;
     }
 
     attached() {
         console.log('Attached text!');
-        console.log(this.container); //TODO: seems like injection isn't working
     }
 
+    get text() {
+        return this.attributes.text;
+    }
+    set text(value) {
+        this.attributes.text = value;
+    }
 }
