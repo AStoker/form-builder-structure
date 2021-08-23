@@ -19,8 +19,8 @@ export class MyApp {
 
         this.initialize();
 
-        this.cloneFormVersion = new FormVersion(this.formJSON);
-        console.log(this.cloneFormVersion);
+        // this.cloneFormVersion = new FormVersion(this.formJSON);
+        // console.log(this.cloneFormVersion);
 
     }
 
