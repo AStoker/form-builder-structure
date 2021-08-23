@@ -50,6 +50,7 @@ export class MyApp {
 
         let label = this.formVersion.add('et-label', {
             text: () => {
+                console.log('Getting');
                 return `Full Name: ${firstName.value} ${lastName.value}`;
             }
         });

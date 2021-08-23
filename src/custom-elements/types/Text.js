@@ -2,7 +2,7 @@ import { IContainer } from 'aurelia';
 
 export class Text {
     //Something nice about shadow dom is that we can use id's and not care if they're used elsewhere
-    static template = '<label>${text}</label>';
+    static template = '<label>${labelText}</label>';
     
     static inject = [IContainer];
 
@@ -21,10 +21,10 @@ export class Text {
         console.log('Attached text!');
     }
 
-    get text() {
+    get labelText() {
         return this.attributes.text;
     }
-    set text(value) {
+    set labelText(value) {
         this.attributes.text = value;
     }
 }
