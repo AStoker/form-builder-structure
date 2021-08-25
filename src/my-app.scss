@@ -1,3 +1,31 @@
-.message {
-  background-color: lightblue;
+.workspace {
+    display: flex;
+    flex-direction: row;
+
+    width: calc(100vw - 16px); //body has a padding of 8px on the left and right
+
+    >* {
+        border: 1px solid gray;
+        padding: .5rem
+    }
+
+    &__elements {
+        flex: 1;
+    }
+    &__content {
+        flex: 2;
+    }
+    &__elements-list {
+        border-top: 1px solid gray;
+    }
+}
+
+.workspace-element {
+    border: 1px solid gray;
+    cursor: pointer;
+}
+
+.form-container {
+    border: 1px solid purple;
+    padding: .5rem;
 }

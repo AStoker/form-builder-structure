@@ -12,10 +12,16 @@ export default class Part {
     }
 
     toJSON() {
+        //TODO: Properly get the getters and setters and their original functions
+        let parsedAttributes = {};
+        for (let attribute in this.attributes) {
+            let attrDesc = Object.getOwnPropertyDescriptor(this.attributes, attribute);
+            parsedAttributes[attribute] = attrDesc;
+        }
         return {
             name: this.name,
             type: this.vm.name,
-            attributes: this.attributes
+            attributes: parsedAttributes
         }
     }
 

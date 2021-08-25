@@ -75,24 +75,13 @@ export default class FormVersion {
                     break;
                 case 'et-label':
                     elementClass = createElementDefinition(elementName, Text);
-                    if (attributes.text && typeof attributes.text === 'function') {
-                        //Redefine text as a getter
-                        let originalTextGetter = attributes.text;
-
-                        //TODO: Get this getter to work
-                        Object.defineProperty(attributes, 
-                            'text',
-                            {
-                                enumerable: true,
-                                get: originalTextGetter
-                            });
-                    }
                     break;
                 default:
                     throw new Error('FormVersion: Invalid element type');
             }
 
-            let elementPart = new Part(elementName, elementClass, attributes);
+            let parsedAttributes = parseGetters(attributes);
+            let elementPart = new Part(elementName, elementClass, parsedAttributes);
 
             this.parts.push(elementPart);
             console.log(this.parts);
@@ -102,56 +91,24 @@ export default class FormVersion {
         }
     }
 
-
-    // parseJSONComponent({name, type, attributes, children}) {
-    //     let parsedChildren = children.map(child => {
-    //         if (child.children) {
-    //             return this.parseJSONComponent(child);
-    //         } else {
-    //             return this.parseJSONElement(child);
-    //         }
-    //     });
-    //     let component = new Component(name, {type, attributes}, parsedChildren);
-    //     return component;
-    // }
-
-    // parseJSONElement({name, type, attributes}) {
-    //     let element = new BasicElement(name, {type, attributes});
-    //     return element;
-    // }
-
-
-    // createElement(elementName, {type, id, attributes, events}) {
-    //     let element = new BasicElement(elementName, {
-    //         type,
-    //         id, //TODO: We want to generate the ID here so we can keep track of them all
-    //         attributes,
-    //         events
-    //     });
-    //     return element;
-    // }
-
-    // createComponent(componentName, {type, id, attributes, events}, children) {
-    //     let component = new Component(componentName, {
-    //         type,
-    //         id,
-    //         attributes,
-    //         events
-    //     }, children);
-    //     return component;
-    // }
 }
 
-/*
-let fullNameLabelElement = new BasicElement('fullNameLabel', {
-    type: 'label',
-    attributes: attr
-});
-this.fullNameElement = new Component('fullName', {
-    type: 'div',
-    attributes: {
+function parseGetters(obj) {
+    let newObj = {};
 
-    }},
-    [fullNameLabelElement]
-);
-*/
+    //Go through the object and any functions turn into getters
+    for (let key in obj) {
+        let attrDesc = Object.getOwnPropertyDescriptor(obj, key);
+        if (typeof attrDesc.value === 'function') {
+            Object.defineProperty(newObj, key, {
+                enumerable: true,
+                get() {
+                    return attrDesc.value();
+                }
+            });
+        } else {
+            newObj[key] = obj[key];
+        }
+    }
+    return newObj;
+}

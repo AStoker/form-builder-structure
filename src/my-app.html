@@ -1,23 +1,52 @@
-<div class="message">${message}</div>
+<h1>Form Builder Structure</h1>
 
-<hr>
+<div class="workspace">
+    
+    <aside class="workspace__elements">
+        <h2>Elements</h2>
 
-<div ref="container">
-    <!-- <au-render repeat.for="part of formVersion.parts" component.bind="part"></au-render> -->
-    <div repeat.for="part of formVersion.parts">
-        <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
-    </div>
+        <div class="workspace__elements-list" ref="elementsList">
+            <div class="workspace-element">
+                <h3>Input</h3>
+                <img alt="Input Icon" />
+            </div>
+            <div class="workspace-element">
+                <h3>Text</h3>
+                <img alt="Text Icon" />
+            </div>
+        </div>
+    </aside>
+    
+    <section class="workspace__content">
+        <h2>Form Viewer</h2>
+    
+        <hr >
+
+        <div class="form-container" ref="formParts">
+    
+            <!-- <au-render repeat.for="part of formVersion.parts" component.bind="part"></au-render> -->
+            <div repeat.for="part of formVersion.parts">
+                <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
+            </div>
+    
+        </div>
+    
+    </section>
+
 </div>
-
+        
 <hr >
-
-<!-- <label>Form Version JSON to save</label>
-<pre ref="json">${formJSON}</pre>
-
-<hr>
-
-<div ref="created">
-    <div repeat.for="part of cloneFormVersion.parts">
-        <au-compose view-model.bind="part.vm" model.bind="part.attributes"></au-compose>
+    
+<section>
+    <label>Form Version JSON to save</label>
+    <pre ref="json">${formJSON}</pre>
+    
+    <hr>
+    
+    <div ref="created">
+        <div repeat.for="part of cloneFormVersion.parts">
+            <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
+        </div>
     </div>
-</div> -->
+
+</section>
