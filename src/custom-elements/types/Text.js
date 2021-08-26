@@ -16,7 +16,7 @@ export class Text {
     }
 
     attached() {
-        console.log('Attached text!');
+        // console.log('Attached text!');
     }
 
 }

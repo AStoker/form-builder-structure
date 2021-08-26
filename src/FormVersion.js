@@ -84,7 +84,7 @@ export default class FormVersion {
             let elementPart = new Part(elementName, elementClass, parsedAttributes);
 
             this.parts.push(elementPart);
-            console.log(this.parts);
+            // console.log(this.parts);
             return elementPart;
         } else {
             //Assume it's an element ready for us to use

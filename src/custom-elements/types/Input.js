@@ -20,7 +20,7 @@ export class Input {
     }
 
     attached() {
-        console.log('Attached input!');
+        // console.log('Attached input!');
     }
 
 }

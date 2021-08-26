@@ -9,7 +9,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "aurelia": "^2.1.0-dev.202108192341",
-    "dragula": "^3.7.3"
+    "sortablejs": "^1.14.0"
   },
   "devDependencies": {
     "@aurelia/plugin-gulp": "^2.1.0-dev.202108192341",

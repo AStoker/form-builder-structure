@@ -1,10 +1,9 @@
 import { inject, IContainer } from 'aurelia';
 
-import dragula from 'dragula';
+import Sortable from 'sortablejs';
 
 import FormVersion from "./FormVersion.js";
 
-import 'dragula/dist/dragula.css';
 
 
 @inject(IContainer)
@@ -18,7 +17,7 @@ export class MyApp {
 
 
         window.formVersion = this.formVersion;
-        console.log(auContainer);
+        // console.log(auContainer);
 
         this.initialize();
 
@@ -32,13 +31,53 @@ export class MyApp {
     }
 
     attached() {
-        this.drake = dragula([this.elementsList, this.formParts], {
-            copy: true,
-            moves: (el, source, handle, sibling) => {
-                console.log(el, source, handle, sibling);
+
+        this.sortableElementsList = Sortable.create(this.elementsList, {
+            group: {
+                name: 'shared',
+                pull: 'clone',
+                // put: false
+            },
+            animation: 150,
+            sort: false,
+            setData: (dataTransfer, dragEl) => {
+                console.log('Element list setData');
+                console.log(dataTransfer, dragEl);
             }
         });
-        window.drake = this.drake;
+        this.sortableFormElements = Sortable.create(this.formParts, {
+            group: {
+                name: 'shared',
+                // put: false
+            },
+            animation: 150,
+            onEnd: (evt) => { //Will be called when moving within the list
+                console.log('onEnd');
+                console.log(evt);
+            },
+            onAdd: (evt) => { //Will be called when a new item is added
+                console.log('onAdd');
+                console.log(evt);
+
+                //Remove the added element
+                evt.to.removeChild(evt.item);
+
+                //Add the element with the form builder
+                let type = evt.item.dataset.type;
+                let attributes = {};
+                switch (type) {
+                    case 'et-input':
+                        attributes.label = 'Input';
+                        break;
+                    case 'et-label':
+                        attributes.text = 'Label';
+                        break;
+                    default:
+                        throw Error('Unknown type');
+                }
+                this.formVersion.add(type, attributes);
+            }
+        });
     }
 
     initialize() {
@@ -47,7 +86,7 @@ export class MyApp {
             placeholder: 'First Name',
             value: 'John'
         });
-        console.log(firstName);
+        // console.log(firstName);
         
         let lastName = this.formVersion.add('et-input', {
             label: 'Last Name',
@@ -59,7 +98,7 @@ export class MyApp {
                 return `Full Name: ${firstName.value} ${lastName.value}`;
             }
         });
-        console.log(label);
+        // console.log(label);
     }
 
     get formJSON() {
