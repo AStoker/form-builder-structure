@@ -4,7 +4,7 @@ import Sortable from 'sortablejs';
 
 import FormVersion from "./FormVersion.js";
 
-
+//TODO: Let's use aurelia store manager to manage state
 
 @inject(IContainer)
 export class MyApp {
@@ -40,9 +40,11 @@ export class MyApp {
             },
             animation: 150,
             sort: false,
-            setData: (dataTransfer, dragEl) => {
-                console.log('Element list setData');
-                console.log(dataTransfer, dragEl);
+            onClone: (evt) => {
+                //TODO: get this working
+                console.log(evt);
+                //Reformat the clone to be roughly the size of the rendered element
+                evt.clone.setAttribute('data-test', 'blarg');
             }
         });
         this.sortableFormElements = Sortable.create(this.formParts, {
@@ -54,6 +56,7 @@ export class MyApp {
             onEnd: (evt) => { //Will be called when moving within the list
                 console.log('onEnd');
                 console.log(evt);
+                //TODO: resort the parts array
             },
             onAdd: (evt) => { //Will be called when a new item is added
                 console.log('onAdd');
@@ -63,11 +66,13 @@ export class MyApp {
                 evt.to.removeChild(evt.item);
 
                 //Add the element with the form builder
+                let indexToAddAt = evt.newIndex;
                 let type = evt.item.dataset.type;
                 let attributes = {};
                 switch (type) {
                     case 'et-input':
                         attributes.label = 'Input';
+                        attributes.placeholder = 'Enter a value';
                         break;
                     case 'et-label':
                         attributes.text = 'Label';
@@ -75,7 +80,7 @@ export class MyApp {
                     default:
                         throw Error('Unknown type');
                 }
-                this.formVersion.add(type, attributes);
+                this.formVersion.add(type, attributes, indexToAddAt);
             }
         });
     }

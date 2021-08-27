@@ -6,13 +6,30 @@
         <h2>Elements</h2>
 
         <div class="workspace__elements-list" ref="elementsList">
+            <!--Add click events so we can use keyboard to add to the bottom of the form-->
             <div class="workspace-element" data-type="et-input">
                 <h3>Input</h3>
-                <img alt="Input Icon" />
+                <svg width="24" height="24" alt="Input icon">
+                    <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
+                </svg>
             </div>
             <div class="workspace-element" data-type="et-label">
                 <h3>Text</h3>
-                <img alt="Text Icon" />
+                <svg width="24" height="24" alt="Text icon">
+                    <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
+                </svg>
+            </div>
+            <div class="workspace-element" data-type="et-input">
+                <h3>Input</h3>
+                <svg width="24" height="24" alt="Input icon">
+                    <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
+                </svg>
+            </div>
+            <div class="workspace-element" data-type="et-label">
+                <h3>Text</h3>
+                <svg width="24" height="24" alt="Text icon">
+                    <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
+                </svg>
             </div>
         </div>
     </aside>
@@ -25,7 +42,7 @@
         <div class="form-container" ref="formParts">
     
             <!-- <au-render repeat.for="part of formVersion.parts" component.bind="part"></au-render> -->
-            <div repeat.for="part of formVersion.parts">
+            <div repeat.for="part of formVersion.parts" data-index="${$index}">
                 <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
             </div>
     

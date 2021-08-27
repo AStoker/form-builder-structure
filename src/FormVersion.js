@@ -62,9 +62,11 @@ export default class FormVersion {
     /*
     * Add an element to the form.
     * @param {string|object} element - The element to add
+    * @param {object} attributes - Attributes to add to the element
+    * @param {number} [index] - The location in the top level where to add the element
     * @returns object - The element added
     */
-    add(element, attributes) {
+    add(element, attributes, index = this.parts.length) {
         if (typeof element === 'string') {
             //Create an element based off the assumed ID given
             let elementClass = null;
@@ -80,10 +82,9 @@ export default class FormVersion {
                     throw new Error('FormVersion: Invalid element type');
             }
 
-            let parsedAttributes = parseGetters(attributes);
-            let elementPart = new Part(elementName, elementClass, parsedAttributes);
+            let elementPart = new Part(elementName, elementClass, attributes);
 
-            this.parts.push(elementPart);
+            this.parts.splice(index, 0, elementPart);
             // console.log(this.parts);
             return elementPart;
         } else {
@@ -91,24 +92,4 @@ export default class FormVersion {
         }
     }
 
-}
-
-function parseGetters(obj) {
-    let newObj = {};
-
-    //Go through the object and any functions turn into getters
-    for (let key in obj) {
-        let attrDesc = Object.getOwnPropertyDescriptor(obj, key);
-        if (typeof attrDesc.value === 'function') {
-            Object.defineProperty(newObj, key, {
-                enumerable: true,
-                get() {
-                    return attrDesc.value();
-                }
-            });
-        } else {
-            newObj[key] = obj[key];
-        }
-    }
-    return newObj;
 }
