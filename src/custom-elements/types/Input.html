@@ -1,0 +1,9 @@
+
+<label for="input">
+    ${attributes.label}
+</label>
+<input
+    id="input"
+    type.bind="attributes.type"
+    placeholder.bind="attributes.placeholder"
+    value.bind="value & debounce" />

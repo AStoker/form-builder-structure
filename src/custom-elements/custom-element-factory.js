@@ -24,7 +24,7 @@ export function enhanceElement(name) {
     return host;
 }
 
-export const createElementDefinition = (name, elemType, cnt) => {
+export const createElementDefinition = (name, vm, template, cnt) => {
     let container = cnt;
     if (!container) {
         let au = new Aurelia();
@@ -33,12 +33,10 @@ export const createElementDefinition = (name, elemType, cnt) => {
 
     name = kebabCase(name);
 
-    let vm = elemType;
-
     const Elem = CustomElement.define({
         name,
         shadowOptions: { mode: 'open' },
-        template: vm.template
+        template
     }, vm);
 
     return Elem;

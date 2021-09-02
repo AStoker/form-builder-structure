@@ -7,30 +7,30 @@
 
         <div class="workspace__elements-list" ref="elementsList">
             <!--Add click events so we can use keyboard to add to the bottom of the form-->
-            <div class="workspace-element" data-type="et-input">
+            <button class="workspace-element" data-type="et-input" click.trigger="addElement('et-input')">
                 <h3>Input</h3>
                 <svg width="24" height="24" alt="Input icon">
                     <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
                 </svg>
-            </div>
-            <div class="workspace-element" data-type="et-label">
-                <h3>Text</h3>
+            </button>
+            <button class="workspace-element" data-type="et-label" click.trigger="addElement('et-label')">
+                <h3>Label</h3>
                 <svg width="24" height="24" alt="Text icon">
                     <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
                 </svg>
-            </div>
-            <div class="workspace-element" data-type="et-input">
-                <h3>Input</h3>
+            </button>
+            <button class="workspace-element" data-type="et-date" click.trigger="addElement('et-date')">
+                <h3>Date</h3>
                 <svg width="24" height="24" alt="Input icon">
                     <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
                 </svg>
-            </div>
-            <div class="workspace-element" data-type="et-label">
+            </button>
+            <button class="workspace-element" data-type="et-text" click.trigger="addElement('et-text')">
                 <h3>Text</h3>
                 <svg width="24" height="24" alt="Text icon">
                     <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="purple" />
                 </svg>
-            </div>
+            </button>
         </div>
     </aside>
     

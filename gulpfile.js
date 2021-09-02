@@ -19,6 +19,15 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 const dist = 'dist';
 
+/*
+TODO: Allow us to have html file imports
+Chunpeng Huo — Today at 5:57 AM
+@bigopon @AStoker you just need to config your webpack loader or gulp.src to skip those html files for Aurelia 2's loader. Basically,
+{ test: /regex_for_au2_html_files/, use: { loader: '@aurelia/webpack-loader', options: {...} } },
+{ test: /regex_for_other_html_files/, use: 'html-loader' },
+*/
+
+
 // Read more in https://dumber.js.org
 const dr = dumber({
   // src folder is by default "src".

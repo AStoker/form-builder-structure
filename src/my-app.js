@@ -13,7 +13,7 @@ export class MyApp {
     constructor(auContainer) {
         this.auContainer = auContainer;
 
-        this.formVersion = new FormVersion();
+        this.formVersion = new FormVersion(null, this.auContainer);
 
 
         window.formVersion = this.formVersion;
@@ -21,7 +21,11 @@ export class MyApp {
 
         this.initialize();
 
-        this.cloneFormVersion = new FormVersion(this.formJSON);
+        //TODO: if we're cloning, we likely want a new container
+        let cloneContainer = this.auContainer.createChild();
+        //TODO: When we hand the json to the form version, it's not properly creating parts, id's are all screwy
+        this.cloneFormVersion = new FormVersion(this.formJSON, this.auContainer);
+        window.cloneFormVersion = this.cloneFormVersion;
         // console.log(this.cloneFormVersion);
 
     }
@@ -69,18 +73,27 @@ export class MyApp {
                 let indexToAddAt = evt.newIndex;
                 let type = evt.item.dataset.type;
                 let attributes = {};
+                //TODO: Have some kind of resolver for this
                 switch (type) {
                     case 'et-input':
                         attributes.label = 'Input';
                         attributes.placeholder = 'Enter a value';
                         break;
+                    case 'et-date':
+                        attributes.label = 'Date';
+                        attributes.type = 'date';
+                        attributes.placeholder = ''; //TODO: Allow empty placeholders
+                        break;
                     case 'et-label':
                         attributes.text = 'Label';
+                        break;
+                    case 'et-text':
+                        attributes.text = 'Text';
                         break;
                     default:
                         throw Error('Unknown type');
                 }
-                this.formVersion.add(type, attributes, indexToAddAt);
+                this.formVersion.add(type, attributes, null, indexToAddAt);
             }
         });
     }
@@ -90,20 +103,48 @@ export class MyApp {
             label: 'First Name',
             placeholder: 'First Name',
             value: 'John'
-        });
+        }, 'firstName');
         // console.log(firstName);
         
         let lastName = this.formVersion.add('et-input', {
             label: 'Last Name',
             placeholder: 'Last Name'
-        });
+        }, 'lastName');
 
         let label = this.formVersion.add('et-label', {
-            text: () => {
+            text: function (formVersion) { //Context will be the formVersion
+                let firstName = formVersion.get('firstName');
+                let lastName = formVersion.get('lastName');
                 return `Full Name: ${firstName.value} ${lastName.value}`;
             }
         });
         // console.log(label);
+    }
+
+    addElement(type) {
+        //Add the element with the form builder
+        let attributes = {};
+        //TODO: Have some kind of resolver for this
+        switch (type) {
+            case 'et-input':
+                attributes.label = 'Input';
+                attributes.placeholder = 'Enter a value';
+                break;
+            case 'et-date':
+                attributes.label = 'Date';
+                attributes.type = 'date';
+                attributes.placeholder = ''; //TODO: Allow empty placeholders
+                break;
+            case 'et-label':
+                attributes.text = 'Label';
+                break;
+            case 'et-text':
+                attributes.text = 'Text';
+                break;
+            default:
+                throw Error('Unknown type');
+        }
+        this.formVersion.add(type, attributes);
     }
 
     get formJSON() {
