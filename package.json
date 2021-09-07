@@ -8,12 +8,12 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "aurelia": "^2.1.0-dev.202108192341",
+    "aurelia": "^2.1.0-dev.202109021206",
     "sortablejs": "^1.14.0"
   },
   "devDependencies": {
-    "@aurelia/plugin-gulp": "^2.1.0-dev.202108192341",
-    "@aurelia/testing": "^2.1.0-dev.202108192341",
+    "@aurelia/plugin-gulp": "^2.1.0-dev.202109021206",
+    "@aurelia/testing": "^2.1.0-dev.202109021206",
     "@babel/core": "^7.14.6",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-decorators": "^7.14.5",
