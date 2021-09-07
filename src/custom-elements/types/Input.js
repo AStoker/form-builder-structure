@@ -12,14 +12,16 @@ class Input {
     //Debounce is set by default to 200ms
     
     static inject = [IContainer, FormEventManager];
+    /**
+     * 
+     * @param {*} container 
+     * @param {*} eventManager 
+     */
 
     constructor(container, eventManager) {
         this.container = container;
         this.eventManager = eventManager;
 
-        //this.id is on the prototype, given from the Part
-
-        this.registerEvents();
 
         this.attributes = {
             label: 'Input',
@@ -29,8 +31,12 @@ class Input {
         };
     }
 
-    activate(attributes) {
+    activate({id, attributes}) {
+        this.id = id;
         this.attributes = attributes;
+
+        //TODO: Be able to register events before the element is attached. We rely on the Id for this.
+        this.registerEvents();
     }
 
     attached() {

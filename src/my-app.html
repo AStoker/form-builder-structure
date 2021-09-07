@@ -43,7 +43,7 @@
     
             <!-- <au-render repeat.for="part of formVersion.parts" component.bind="part"></au-render> -->
             <div repeat.for="part of formVersion.parts" data-index="${$index}">
-                <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
+                <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.data"></au-compose>
             </div>
     
         </div>
@@ -51,6 +51,21 @@
     </section>
 
 </div>
+
+<hr />
+
+<section>
+    <h2>Event Log</h2>
+
+    <div ref="eventLog">
+        <ul>
+            <li repeat.for="event of events">
+                ${event}
+            </li>
+        </ul>
+    </div>
+
+</section>
         
 <hr >
     
@@ -62,7 +77,7 @@
     
     <div ref="created">
         <div repeat.for="part of cloneFormVersion.parts">
-            <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.attributes"></au-compose>
+            <au-compose view-model.bind="part.vm" view-model.ref="part.compose" model.bind="part.data"></au-compose>
         </div>
     </div>
 

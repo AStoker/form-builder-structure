@@ -1,5 +1,12 @@
 
+/*
+* Right now we aren't registering events until after the part is rendered. Might be nice to register at construction time of the part.
+*/
 
+/*
+* This is a singleton class that manages the event handlers for the form.
+* @param {Object} form - the form object
+*/
 export class FormEventManager {
 
     constructor(formVersion) {
@@ -10,13 +17,18 @@ export class FormEventManager {
         this.event = new PubSub();
     }
 
+    /*
+    * Register an event handler for a given part. Returns a function that can be used to publish events.
+    * @param {Object} element - The element
+    * @return {Object} - An object which contains the publish function to publish events
+    */
     registerElement(elementInstance) {
         //Do we really need this?
-        this.setRegistryElement(elementInstance);
-
+        // this.setRegistryElement(elementInstance);
+        const elementId = elementInstance.id;
         return {
             publish: (eventName, eventData) => {
-                this.event.publish(`${elementInstance.id}:${eventName}`, eventData);
+                this.event.publish(`${elementId}:${eventName}`, eventData);
             }
         }
     }
@@ -25,13 +37,13 @@ export class FormEventManager {
     * Add the element to the registry map if it doesn't already exist, otherwise add the element to the array of elements
     *   @param {ElementInstance} elementInstance
     */
-    setRegistryElement(elementInstance) {
-        if (!this.registry.has(elementInstance)) {
-            this.registry.set(elementInstance, [elementInstance]);
-        } else {
-            this.registry.get(elementInstance).push(elementInstance);
-        }
-    }
+    // setRegistryElement(elementInstance) {
+    //     if (!this.registry.has(elementInstance)) {
+    //         this.registry.set(elementInstance, [elementInstance]);
+    //     } else {
+    //         this.registry.get(elementInstance).push(elementInstance);
+    //     }
+    // }
 
 }
 

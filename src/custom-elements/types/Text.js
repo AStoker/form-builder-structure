@@ -20,7 +20,8 @@ class Text {
         // console.log(DirtyCheckSettings);
     }
 
-    activate(attributes) {
+    activate({id, attributes}) {
+        this.id = id;
         this.attributes = attributes;
     }
 

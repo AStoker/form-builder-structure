@@ -28,7 +28,6 @@ export default class FormVersion {
         }
 
         this.eventManager = container.get(FormEventManager);
-        //TODO: We need some kind of event management here
     }
 
     /*
@@ -97,13 +96,11 @@ export default class FormVersion {
                     throw new Error('FormVersion: Invalid element type');
             }
 
-            //TODO: Figure some way to give unique ID's to all parts. This will be used for events and identifying the parts. Need to ensure that all ID's are unique
             id = id || createId(elementName, this.allIds);
-            let parsedAttributes = parseGetters(attributes, this);
             let elementPart = new Part(id, elementName, elementClass, attributes, this);
 
             this.parts.splice(index, 0, elementPart);
-            // console.log(this.parts);
+
             return elementPart;
         } else {
             //Assume it's an element ready for us to use
@@ -139,35 +136,4 @@ function createId(elementName, ids) {
         id = `${elementName.toLowerCase()}-${index}`;
     }
     return id;
-}
-
-
-function parseGetters(obj, callingContext) {
-    let newObj = {};
-
-    //Go through the object and any functions turn into getters
-    for (let key in obj) {
-        let attrDesc = Object.getOwnPropertyDescriptor(obj, key);
-        if (typeof attrDesc.value === 'function') {
-            Object.defineProperty(newObj, key, {
-                enumerable: true,
-                get() {
-                    return attrDesc.value.bind(callingContext)(callingContext);
-                }
-            });
-        } else if (typeof attrDesc.value === 'object') { //We've likely received an object which defines a getter (from JSON)
-            //We're going to expect a 'get' property
-            // newObj[key] = eval(attrDesc.value.get); //TODO: can we make this safer without eval?
-            Object.defineProperty(newObj, key, {
-                enumerable: true,
-                get() {
-                    //Need to execute this in the context of the parent... How can we do that?
-                    return eval(attrDesc.value.get).bind(callingContext)(callingContext);//TODO: can we make this safer without eval?
-                }
-            });
-        } else {
-            newObj[key] = obj[key];
-        }
-    }
-    return newObj;
 }

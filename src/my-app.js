@@ -9,6 +9,7 @@ import FormVersion from "./FormVersion.js";
 @inject(IContainer)
 export class MyApp {
     formVersion = null;
+    events = [];
 
     constructor(auContainer) {
         this.auContainer = auContainer;
@@ -21,12 +22,9 @@ export class MyApp {
 
         this.initialize();
 
-        //TODO: if we're cloning, we likely want a new container
         let cloneContainer = this.auContainer.createChild();
-        //TODO: When we hand the json to the form version, it's not properly creating parts, id's are all screwy
-        this.cloneFormVersion = new FormVersion(this.formJSON, this.auContainer);
+        this.cloneFormVersion = new FormVersion(this.formJSON, cloneContainer);
         window.cloneFormVersion = this.cloneFormVersion;
-        // console.log(this.cloneFormVersion);
 
     }
 
@@ -104,7 +102,6 @@ export class MyApp {
             placeholder: 'First Name',
             value: 'John'
         }, 'firstName');
-        // console.log(firstName);
         
         let lastName = this.formVersion.add('et-input', {
             label: 'Last Name',
@@ -118,7 +115,25 @@ export class MyApp {
                 return `Full Name: ${firstName.value} ${lastName.value}`;
             }
         });
-        // console.log(label);
+
+        this.listenForEvents(['firstName', 'lastName', label]);
+    }
+
+    listenForEvents(elements) {
+        elements.forEach((e) => {
+
+            let element = typeof e === 'string' ? this.formVersion.get(e) : e;
+            let eventId = `${element.id}:change`;
+            this.formVersion.eventManager.event.subscribe(eventId, (event) => {
+                this.events.push(`${eventId}, ${event}`);
+            });
+
+            //TODO: provide events on parts
+            // let element = this.formVersion.get(typeof e === 'string' ? e : e.id);
+            // element.on('change', (evt) => {
+            //     this.events.push(evt);
+            // });
+        });
     }
 
     addElement(type) {

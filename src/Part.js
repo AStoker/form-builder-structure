@@ -7,7 +7,8 @@ export default class Part {
         this.id = id; //This does not correlate to the DOM id
         this.name = name;
         this.vm = elementClass;
-        this.vm.prototype.id = this.id;
+        //TODO: We need to get the ID to the element somehow. Doing it on the prototype won't work because it'll overwrite all parts
+        //this.vm.prototype.id = this.id;
 
         this._attributes = attributes;
         // this.attributes = parseGetters(attributes, formVersion);
@@ -20,18 +21,16 @@ export default class Part {
     }
 
     toJSON() {
-        //TODO: Properly get the getters and setters and their original functions
         let parsedAttributes = {};
         for (let attribute in this._attributes) {
             let attrDesc = Object.getOwnPropertyDescriptor(this._attributes, attribute);
             if (typeof attrDesc?.value === 'function') {
                 attrDesc.value = {
-                    get: attrDesc.value.toString()//.replace(/\r?\n|\r/g, " ") //Remove any special chars from the string
+                    get: attrDesc.value.toString()
                 };
             } else if (typeof attrDesc?.get === 'function') {
-                //TODO: get the actual getter function
                 attrDesc.value = {
-                    get: attrDesc.get.toString()//.replace(/\r?\n|\r/g, " ") //Remove any special chars from the string
+                    get: attrDesc.get.toString()
                 };
             }
             parsedAttributes[attribute] = attrDesc.value;
@@ -41,6 +40,13 @@ export default class Part {
             name: this.name,
             type: this.vm.name,
             attributes: parsedAttributes
+        }
+    }
+
+    get data() {
+        return {
+            id: this.id,
+            attributes: this.attributes
         }
     }
 
@@ -77,7 +83,6 @@ function parseGetters(obj, callingContext) {
             });
         } else if (typeof attrDesc.value === 'object') { //We've likely received an object which defines a getter (from JSON)
             //We're going to expect a 'get' property
-            // newObj[key] = eval(attrDesc.value.get); //TODO: can we make this safer without eval?
             // let getterFunc = new Function('formVersion', `return (${attrDesc.value.get})(formVersion)`);
             Object.defineProperty(newObj, key, {
                 enumerable: true,
